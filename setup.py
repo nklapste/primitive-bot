@@ -15,7 +15,6 @@ class PyTest(TestCommand):
     def initialize_options(self):
         TestCommand.initialize_options(self)
         os.makedirs("test-reports", exist_ok=True)
-        open("pytest.log", "w").close()
         self.pytest_args = "-v --log-file=test-reports/pytest.log " \
                            "--log-format='%(asctime)s %(levelname)s %(message)s' " \
                            "--log-date-format='%Y-%m-%d %H:%M:%S'"

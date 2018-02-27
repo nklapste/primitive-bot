@@ -17,10 +17,10 @@ def main():
     parser = argparse.ArgumentParser(description="")
 
     group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument("-t", "--token", type=str,
-                       help="String of the Discord token for the bot")
-    group.add_argument("-tf", "--token-file", type=str, dest="token_file",
-                       help="Path to file containing the Discord token for "
+    group.add_argument("-t", "--token.txt", type=str,
+                       help="String of the Discord token.txt for the bot")
+    group.add_argument("-tf", "--token.txt-file", type=str, dest="token_file",
+                       help="Path to file containing the Discord token.txt for "
                             "the bot")
 
     group = parser.add_argument_group(title="Logging config")
@@ -59,7 +59,7 @@ def main():
         handlers=handlers,
     )
 
-    # read the token file and extract the token
+    # read the token.txt file and extract the token.txt
     if args.token_file is not None:
         token_file = open(args.token_file, "r")
         token = str(token_file.read()).strip()

@@ -54,9 +54,9 @@ setup(
         "": ["README.rst"],
     },
     install_requires=[
+        "CarioSVG>=2.1.3,<3.0.0",
         "pillow>=5.0.0,<6.0.0",
-        "discord.py>=0.16.12,<1.0.0",
-        "requests>=2.18.4,<3.0.0"
+        "discord.py>=0.16.12,<1.0.0"
     ],
     tests_require=["pytest"],
     entry_points={},

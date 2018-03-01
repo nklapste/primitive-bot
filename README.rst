@@ -3,7 +3,8 @@ primitive-bot
 *************
 
 A Discord bot that converts inputted images into primitive vector based
-graphics (.svg).
+graphics (.svg). After converting an inputted image primitive-bot
+provides both a raw .svg and a Discord display friendly .png.
 
 Requirements
 ============
@@ -16,4 +17,4 @@ Python:
 
 - PIL
 - Discord.py
-- requests
+- cairosvg

@@ -18,6 +18,8 @@ SUPPORTED_IMAGE_TYPES = {"PNG", "JPEG", "JPG", "GIF"}
 MAX_SIZE = 50000000
 
 
+# TODO currently only outputs .svg's should convert to png for thumbnail
+# TODO and still delivier the .svg
 def make_primitive_image_io(image: Image, image_type: str,
                             shape_number: int) -> BytesIO:
     """Use sylvaindumont/primitive/:pr to make a primitive image"""

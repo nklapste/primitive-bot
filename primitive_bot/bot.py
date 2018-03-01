@@ -3,6 +3,7 @@
 
 """primitive-bot Discord bot api"""
 
+from uuid import uuid4
 from logging import getLogger
 
 from discord.ext import commands
@@ -10,6 +11,7 @@ from discord.ext.commands import Bot
 from discord.ext.commands.context import Context
 
 from primitive_bot.images import primify_attachment
+
 
 DESCRIPTION = """primitive-bot a Discord bot that converts inputted images
 into primitive vector based graphics."""
@@ -33,17 +35,31 @@ class ImageManipulation:
         self.bot = bot
 
     @commands.command(pass_context=True)
-    async def upload_image(self, ctx: Context, shape_number: int):
-        """upload an image into a temporary instance for later editing"""
+    async def primify(self, ctx: Context, shape_number: int):
+        """Upload an image and convert it to a primitive image"""
         for attachment in ctx.message.attachments:
-            await self.bot.send_file(
-                ctx.message.channel,
-                fp=primify_attachment(
+            try:
+                primitive_image, display_image = primify_attachment(
                     attachment=attachment,
                     shape_number=shape_number
-                ),
-                filename="out.svg"
-            )
+                )
+                out_id = uuid4()
+                await self.bot.send_file(
+                    ctx.message.channel,
+                    fp=display_image,
+                    filename="{}.png".format(out_id)
+                )
+                await self.bot.send_file(
+                    ctx.message.channel,
+                    fp=primitive_image,
+                    filename="{}.svg".format(out_id)
+                )
+            except (ValueError, TypeError) as error:
+                __log__.exception("failed to primify attachments", exc_info=True)
+                await self.bot.send_message(
+                    ctx.message.channel,
+                    "ERROR: {}".format(error)
+                )
 
 
 BOT.add_cog(ImageManipulation(BOT))

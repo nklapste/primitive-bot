@@ -1,10 +1,11 @@
 #!/usr/bin/python3.6
 # -*- coding: utf-8 -*-
 
-"""deal with downloading modifying and uploading images"""
-from typing import List
+"""Deal with downloading and modifying (primifying) images"""
 
-import requests
+from typing import Tuple
+
+from urllib.request import urlopen, Request
 import os
 import subprocess
 from io import BytesIO
@@ -12,14 +13,15 @@ from io import BytesIO
 from PIL import Image as Im
 from PIL.Image import Image
 
+# TODO look into svglib 0.8.1 as a replacement
+from cairosvg import svg2png
 
 SUPPORTED_IMAGE_TYPES = {"PNG", "JPEG", "JPG", "GIF"}
 
 MAX_SIZE = 50000000
+MAX_SHAPES = 200
 
 
-# TODO currently only outputs .svg's should convert to png for thumbnail
-# TODO and still delivier the .svg
 def make_primitive_image_io(image: Image, image_type: str,
                             shape_number: int) -> BytesIO:
     """Use sylvaindumont/primitive/:pr to make a primitive image"""
@@ -42,23 +44,41 @@ def make_primitive_image_io(image: Image, image_type: str,
     return BytesIO(process.stdout)
 
 
-def primify_attachment(attachment: dict, shape_number: int) -> BytesIO:
-    """Convert a discord image attachment to a primitive image"""
+def primify_attachment(attachment: dict, shape_number: int) -> \
+        Tuple[BytesIO, BytesIO]:
+    """Convert a discord image attachment to a primitive image
+
+    :return: Tuple of two BytesIO file-like objects of the primitive image
+        one as a .svg the other as a .png
+    """
     filename, file_extension = os.path.splitext(attachment.get("filename"))
     file_extension = file_extension.lstrip(".").upper()
     file_size = attachment.get("size")
 
     if file_extension not in SUPPORTED_IMAGE_TYPES:
-        raise TypeError("Image type: {} is not supported".format(file_extension))
-
+        raise TypeError("image type: .{} is not "
+                        "supported".format(file_extension))
     if file_size > MAX_SIZE:
-        raise ValueError("Image is to large: {}".format(file_size))
+        raise ValueError("image is too large: {}".format(file_size))
+    if shape_number > MAX_SHAPES:
+        raise ValueError("shape number must be equal to or less than 200")
 
     url = attachment["url"]
-    return make_primitive_image_io(
-        image=Im.open(requests.get(url, stream=True).raw),
+
+    # discord hates urllibs default headers, giving another UAS works fine
+    req = Request(url, headers={'User-Agent': 'primitive-bot'})
+
+    # make the primitive image
+    primitive_image = make_primitive_image_io(
+        image=Im.open(urlopen(req)),
         image_type=file_extension,
         shape_number=shape_number,
     )
 
+    # make a png of the primitive image for displaying on discord
+    display_image = BytesIO(svg2png(primitive_image.read()))
 
+    # seek back to the start of the primitive image
+    primitive_image.seek(0)
+
+    return primitive_image, display_image

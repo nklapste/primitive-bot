@@ -45,4 +45,5 @@ class ImageManipulation:
                 filename="out.svg"
             )
 
+
 BOT.add_cog(ImageManipulation(BOT))

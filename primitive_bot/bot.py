@@ -45,14 +45,4 @@ class ImageManipulation:
                 filename="out.svg"
             )
 
-
-class Config:
-    """Config commands for the primitive-bot"""
-
-    def __init__(self, bot):
-        self.bot = bot
-
-
-BOT.add_cog(Config(BOT))
-
 BOT.add_cog(ImageManipulation(BOT))

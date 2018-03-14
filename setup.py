@@ -59,6 +59,10 @@ setup(
         "discord.py>=0.16.12,<1.0.0"
     ],
     tests_require=["pytest"],
-    entry_points={},
+    entry_points={
+        "console_scripts": [
+            "primitive-bot = primitive_bot.__main__:main"
+        ]
+    },
     cmdclass={'test': PyTest},
 )

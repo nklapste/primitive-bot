@@ -37,7 +37,7 @@ class ImageManipulation:
     @commands.command(pass_context=True)
     async def primify(self, ctx: Context, shape_number: int = 25,
                       shape_type: str = "triangle", extra_shapes: int = 0):
-        """Upload an images)and convert them to a primitive images
+        """Upload images and convert them to a primitive images
 
         .. note::
 

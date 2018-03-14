@@ -35,13 +35,66 @@ class ImageManipulation:
         self.bot = bot
 
     @commands.command(pass_context=True)
-    async def primify(self, ctx: Context, shape_number: int):
-        """Upload an image and convert it to a primitive image"""
+    async def primify(self, ctx: Context, shape_number: int = 25,
+                      shape_type: str = "triangle", extra_shapes: int = 0):
+        """Upload an images)and convert them to a primitive images
+
+        .. note::
+
+            You must run this command within the optional `add a comment`
+            section while attaching/uploading images for this command to
+            properly execute.
+
+        The following image formats are supported by primitive-bot:
+            - PNG
+            - JPEG
+            - JPG
+            - GIF
+
+
+        :param shape_number: The number of shapes to be used for constructing
+            the primitive images.
+
+            .. note::
+
+                Due to computational limits shape_number must be equal or
+                less than 200
+
+        :type shape_number: int = 25
+
+
+        :param shape_type: The type of shape to be used for constructing the
+            primitive images. The following shape names ``OR`` shape reference
+            numbers are allowed as arguments:
+                - combo          ``OR``  0
+                - triangle       ``OR``  1
+                - rect           ``OR``  2
+                - ellipse        ``OR``  3
+                - circle         ``OR``  4
+                - rotatedrect    ``OR``  5
+                - beziers        ``OR``  6
+                - rotatedellipse ``OR``  7
+                - polygon        ``OR``  8
+        :type shape_type: str = "triangle"
+
+
+        :param extra_shapes: Add N extra shapes each iteration with
+            reduced search (mostly good for beziers).
+
+            .. note::
+
+                Due to computational limits `extra_shapes` must be equal or
+                less than 20
+
+        :type extra_shapes: int = 0
+        """
         for attachment in ctx.message.attachments:
             try:
                 primitive_image, display_image = primify_attachment(
                     attachment=attachment,
-                    shape_number=shape_number
+                    shape_number=shape_number,
+                    shape_type=shape_type,
+                    extra_shapes=extra_shapes
                 )
                 out_id = uuid4()
                 await self.bot.send_file(

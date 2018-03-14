@@ -20,8 +20,8 @@ def main():
     group.add_argument("-t", "--token.txt", type=str,
                        help="String of the Discord token.txt for the bot")
     group.add_argument("-tf", "--token.txt-file", type=str, dest="token_file",
-                       help="Path to file containing the Discord token.txt for "
-                            "the bot")
+                       help="Path to file containing the Discord token.txt "
+                            "for the bot")
 
     group = parser.add_argument_group(title="Logging config")
     group.add_argument("-v", "--verbose", action="store_true",

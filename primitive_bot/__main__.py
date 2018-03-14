@@ -16,7 +16,8 @@ def main():
     """Startup script for the primitive-bot"""
     parser = argparse.ArgumentParser(description="")
 
-    group = parser.add_mutually_exclusive_group(required=True)
+    group = parser.add_argument_group(title="Token config")
+    group = group.add_mutually_exclusive_group(required=True)
     group.add_argument("-t", "--token", type=str,
                        help="String of the Discord token.txt for the bot")
     group.add_argument("-tf", "--token-file", type=str, dest="token_file",

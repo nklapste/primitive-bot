@@ -17,9 +17,9 @@ def main():
     parser = argparse.ArgumentParser(description="")
 
     group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument("-t", "--token.txt", type=str,
+    group.add_argument("-t", "--token", type=str,
                        help="String of the Discord token.txt for the bot")
-    group.add_argument("-tf", "--token.txt-file", type=str, dest="token_file",
+    group.add_argument("-tf", "--token-file", type=str, dest="token_file",
                        help="Path to file containing the Discord token.txt "
                             "for the bot")
 
